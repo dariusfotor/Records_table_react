@@ -1,0 +1,36 @@
+table {
+  text-align: center;
+}
+ul .pagination {
+  display: inline-block;
+  margin: 0 5px 5px 5px;
+  padding: 3px;
+}
+label {
+  margin: 10px;
+}
+.container {
+  margin-top: 50px;
+}
+.thIcon {
+  margin-left: 10px;
+}
+.thID {
+  width: 100px;
+}
+.loading {
+  font-size: 28px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 400px;
+  margin-top: 50px;
+  text-align: center;
+}
+.btnAllComments {
+  border: 1px solid rgb(166, 166, 166);
+  border-radius: 5px;
+  margin-left: 10px;
+}
+h1 {
+  text-align: center;
+}
