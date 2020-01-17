@@ -7,7 +7,6 @@ import "../style/style.css";
 export class selectedComments extends Component {
   render() {
     const propsSelectedComments = this.props.selectedComments;
-    console.log(propsSelectedComments);
     const renderedSelectedComments = propsSelectedComments.map(i => {
       return (
         <tbody key={i.id}>
@@ -19,7 +18,6 @@ export class selectedComments extends Component {
         </tbody>
       );
     });
-    console.log(renderedSelectedComments);
     return (
       <div className="container">
         <h1>Pasirinkti irasai</h1>

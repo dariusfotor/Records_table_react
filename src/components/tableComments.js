@@ -17,6 +17,7 @@ export class tableComments extends Component {
       sortedColumn: "",
       direction: "desc",
       selectedID: [],
+      isActive: [],
       btnTotalComments: false
     };
     this.sort = this.sort.bind(this);
@@ -47,12 +48,18 @@ export class tableComments extends Component {
       btnTotalComments: true
     });
   };
-  clickedId = id => {
+  clickedId = (id, i) => {
     const selectId = this.props.comments.find(i => i.id === id);
     const newId = [...this.state.selectedID, selectId];
     this.setState({
       selectedID: newId
     });
+    if (i !== this.state.isActive) {
+      // const colorId = [...this.state.isActive, i];
+      this.setState({
+        isActive: i
+      });
+    }
   };
   render() {
     const {
@@ -74,10 +81,18 @@ export class tableComments extends Component {
     const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
     const currentTodos = comments.slice(indexOfFirstTodo, indexOfLastTodo);
     // Mapping comments per page
-    const renderTodos = currentTodos.map(item => {
+    const renderTodos = currentTodos.map((item, i) => {
       return (
-        <tbody key={item.id}>
-          <tr onClick={() => this.clickedId(item.id)}>
+        <tbody>
+          <tr
+            key={item.id}
+            onClick={() => this.clickedId(item.id, i)}
+            style={
+              this.state.isActive === i
+                ? { background: "green" }
+                : { background: "none" }
+            }
+          >
             <td>{item.id}</td>
             <td>{item.name} </td>
             <td>{item.email}</td>
