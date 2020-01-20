@@ -17,7 +17,7 @@ export class tableComments extends Component {
       sortedColumn: "",
       direction: "desc",
       selectedID: [],
-      isActive: [],
+      isActive: null,
       btnTotalComments: false
     };
     this.sort = this.sort.bind(this);
@@ -100,10 +100,18 @@ export class tableComments extends Component {
         </tbody>
       );
     });
-    const allComments = comments.map(item => {
+    const allComments = comments.map((item, i) => {
       return (
-        <tbody key={item.id}>
-          <tr onClick={() => this.clickedId(item.id)}>
+        <tbody>
+          <tr
+            key={item.id}
+            onClick={() => this.clickedId(item.id, i)}
+            style={
+              this.state.isActive === i
+                ? { background: "green" }
+                : { background: "none" }
+            }
+          >
             <td>{item.id}</td>
             <td>{item.name} </td>
             <td>{item.email}</td>
