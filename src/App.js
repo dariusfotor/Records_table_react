@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Table from "./components/tableComments";
+import TableComments from "./components/tableComments";
 
 export class App extends Component {
   render() {
     return (
       <div>
-        <Table />
+        <TableComments />
       </div>
     );
   }

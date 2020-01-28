@@ -18,9 +18,9 @@ export class tableComments extends Component {
       direction: "desc",
       selectedID: [],
       isActive: null,
+      sortType: "asc",
       btnTotalComments: false
     };
-    this.sort = this.sort.bind(this);
   }
   componentDidMount() {
     this.props.fetchArticleDetails();
@@ -38,11 +38,6 @@ export class tableComments extends Component {
     });
   };
 
-  sort = direction => {
-    this.setState({
-      direction
-    });
-  };
   allComments = () => {
     this.setState({
       btnTotalComments: true
@@ -55,68 +50,66 @@ export class tableComments extends Component {
       selectedID: newId
     });
     if (i !== this.state.isActive) {
-      // const colorId = [...this.state.isActive, i];
       this.setState({
         isActive: i
       });
     }
   };
+  sorted = sortType => {
+    this.setState({ sortType });
+  };
   render() {
-    const {
-      currentPage,
-      todosPerPage,
-      direction,
-      btnTotalComments
-    } = this.state;
+    console.log(this.state.isActive);
+    const { currentPage, todosPerPage, btnTotalComments } = this.state;
     const { error, loading, comments } = this.props;
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-
     if (loading) {
       return <div className="loading">Loading...</div>;
     }
     // Pagination
     const indexOfLastTodo = currentPage * todosPerPage;
     const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-    const currentTodos = comments.slice(indexOfFirstTodo, indexOfLastTodo);
+    const currentComments = comments.slice(indexOfFirstTodo, indexOfLastTodo);
+    // Sorting
+    const sortedAllComments = this.props.comments.sort((a, b) => {
+      const sorted = this.state.sortType === "asc" ? 1 : -1;
+      return sorted * a.id - b.id;
+    });
     // Mapping comments per page
-    const renderTodos = currentTodos.map((item, i) => {
+    const renderedComments = currentComments.map((item, i) => {
       return (
-        <tbody>
-          <tr
-            key={item.id}
-            onClick={() => this.clickedId(item.id, i)}
-            style={
-              this.state.isActive === i
-                ? { background: "green" }
-                : { background: "none" }
-            }
-          >
-            <td>{item.id}</td>
-            <td>{item.name} </td>
-            <td>{item.email}</td>
-          </tr>
-        </tbody>
+        <tr
+          key={i}
+          onClick={() => this.clickedId(item.id, i)}
+          style={
+            this.state.isActive === i
+              ? { background: "green" }
+              : { background: "none" }
+          }
+        >
+          <td>{item.id}</td>
+          <td>{item.name} </td>
+          <td>{item.email}</td>
+        </tr>
       );
     });
-    const allComments = comments.map((item, i) => {
+    const allComments = sortedAllComments.map((x, index) => {
       return (
-        <tbody>
-          <tr
-            key={item.id}
-            onClick={() => this.clickedId(item.id, i)}
-            style={
-              this.state.isActive === i
-                ? { background: "green" }
-                : { background: "none" }
-            }
-          >
-            <td>{item.id}</td>
-            <td>{item.name} </td>
-            <td>{item.email}</td>
-          </tr>
-        </tbody>
+        <tr
+          key={index}
+          onClick={() => this.clickedId(x.id, index)}
+          style={
+            this.state.isActive === index
+              ? { background: "green" }
+              : { background: "none" }
+          }
+        >
+          <td>{x.id}</td>
+          <td>{x.name} </td>
+          <td>{x.email}</td>
+        </tr>
       );
     });
     // Logic for displaying page numbers
@@ -138,18 +131,10 @@ export class tableComments extends Component {
         </ul>
       );
     });
-    // Sorting
-    const sorted = renderTodos.sort((a, b) => {
-      if (direction === "desc") {
-        return 1;
-      } else {
-        return -1;
-      }
-    });
     return (
       <div className="container">
         <SelectedComments selectedComments={this.state.selectedID} />
-        <h1>Irasu lentele</h1>
+        <h1>Irašų lentelė</h1>
         <label>Rodyti po</label>
         <select value={this.state.todosPerPage} onChange={this.handleChange}>
           <option value="10">10</option>
@@ -159,26 +144,31 @@ export class tableComments extends Component {
           <option value="70">70</option>
         </select>
         <button className="btnAllComments" onClick={this.allComments}>
-          Visi irasai
+          Visi įrašai
         </button>
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
-              <th className="thID" onClick={this.sort}>
+              <th className="thID">
                 ID
-                <FontAwesomeIcon className="thIcon" icon={faSort} size="1x" />
+                <FontAwesomeIcon
+                  // onClick={() => this.sorted("desc")}
+                  className="thIcon"
+                  icon={faSort}
+                  size="1x"
+                />
               </th>
-              <th onClick={this.sort}>
+              <th>
                 Komentarai
                 <FontAwesomeIcon className="thIcon" icon={faSort} size="1x" />
               </th>
-              <th onClick={this.sort}>
+              <th>
                 Email
                 <FontAwesomeIcon className="thIcon" icon={faSort} size="1x" />
               </th>
             </tr>
           </thead>
-          {btnTotalComments ? allComments : renderTodos}
+          {btnTotalComments ? allComments : renderedComments}
         </Table>
         <ul>{renderPageNumbers}</ul>
       </div>

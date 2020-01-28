@@ -7,20 +7,19 @@ import "../style/style.css";
 export class selectedComments extends Component {
   render() {
     const propsSelectedComments = this.props.selectedComments;
+    console.log(propsSelectedComments);
     const renderedSelectedComments = propsSelectedComments.map(i => {
       return (
-        <tbody key={i.id}>
-          <tr>
-            <td>{i.id}</td>
-            <td>{i.name} </td>
-            <td>{i.email}</td>
-          </tr>
-        </tbody>
+        <tr key={i.id}>
+          <td>{i.id}</td>
+          <td>{i.name} </td>
+          <td>{i.email}</td>
+        </tr>
       );
     });
     return (
       <div className="container">
-        <h1>Pasirinkti irasai</h1>
+        <h1>Pasirinkti įrašai</h1>
         <Table striped bordered hover variant="success">
           <thead>
             <tr>
@@ -38,14 +37,13 @@ export class selectedComments extends Component {
               </th>
             </tr>
           </thead>
+
           {propsSelectedComments === [] ? (
-            <tbody>
-              <tr>
-                <td></td>
-                <td>Parinktu irasu nera</td>
-                <td></td>
-              </tr>
-            </tbody>
+            <tr>
+              <td></td>
+              <td>Parinktu irasu nera</td>
+              <td></td>
+            </tr>
           ) : (
             renderedSelectedComments
           )}
